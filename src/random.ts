@@ -47,11 +47,13 @@ const main = async () => {
   const rawRes = response.body;
 
   // Convert it to a JSON String
-  const jsonString = new TextDecoder().decode(rawRes);
-  console.log(jsonString);
+  const jsonString: any = new TextDecoder().decode(rawRes);
+  // console.log(jsonString);
 
   // Parse the JSON string
-  const parsedResponse = JSON.parse(jsonString);
+  const json = JSON.parse(jsonString);
+  console.log(json.content[0].text);
+
   //
   // console.log("-------------------------");
   // console.log("---Pased Response Body---");

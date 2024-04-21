@@ -1,18 +1,20 @@
 import "dotenv/config";
 import { Telegraf } from "telegraf";
 import { callbackQuery, message } from "telegraf/filters";
+import { getAns } from "./util/getAns";
 
 const TOKEN = process.env.TOKEN_TELEGRAM as string;
 const bot = new Telegraf(TOKEN);
 
-const NOME_BOT = "SamAI";
+const NOME_BOT = "SamIA";
 
 bot.start(async (ctx) => {
   await ctx.replyWithPhoto({
     source: "./src/public/09b8252c-e0d7-489b-9e20-39ab2d8209d3.jpeg",
   });
-  await ctx.reply(`Ola eu sou a ${NOME_BOT} sou a inteligencia artificial da secretaria de saude de Mogi
-            UMA_FRASE_MOTIVACIONAL comigo voce pode /agendar uma consulta, conseguir uma copia da sua /caderneta prenatal ou voce pode converçar comigo sober qualquer duvida sobre gravidez`);
+  await ctx.reply(
+    `Oii eu sou a ${NOME_BOT} sou a inteligencia artificial da secretaria de saude de Mogi, como posso estar ajudando vc`,
+  );
   // ctx.reply("Ola  tudo bem?  me fale mais sobre você qual seu nome?");
   // step = 1;
   // ctx.replyWithQuiz("tar", ["1", "2"]);
@@ -35,9 +37,18 @@ bot.command("agendar", (ctx) => {
 
 bot.command("caderneta", async (ctx) => {
   await ctx.reply(
-    "Estamos enviando uma copia da sua caderneta espere um pouco",
+    "Estamos enviando uma copia da sua caderneta espere um pouco 🥳",
   );
   await ctx.replyWithDocument({ source: "./src/public/cardeneta.pdf" });
+});
+
+bot.on(message("text"), async (ctx) => {
+  const textOfMensage = ctx.update.message.text;
+  console.log(textOfMensage);
+  ctx.reply("Voce é a primeira da fila, só um momento");
+  const ans = await getAns(textOfMensage);
+  ctx.reply(ans);
+  console.log(ans);
 });
 
 bot.on(callbackQuery("data"), (ctx) => {
