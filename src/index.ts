@@ -1,8 +1,6 @@
 import "dotenv/config";
 import { Telegraf } from "telegraf";
 import { callbackQuery, message } from "telegraf/filters";
-import { Pacient } from "./types/Pacient";
-import { replyIdade, replyNome } from "./utils/replies";
 
 const TOKEN = process.env.TOKEN_TELEGRAM as string;
 const bot = new Telegraf(TOKEN);
