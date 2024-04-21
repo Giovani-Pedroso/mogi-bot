@@ -21,7 +21,7 @@ export const getAns = async (question: string) => {
           content: [
             {
               type: `text`,
-              text: `responda essa pergunta como um agente de saude chamada samIA de maneira informal , humanizada , gentil e com delicadeza, para uma pessoa: ${question}`,
+              text: `responda de maneira objetiva e curta essa pergunta como um agente de saude chamada samIA de maneira informal , humanizada , gentil e com delicadeza, para uma pessoa: ${question}`,
             },
           ],
         },

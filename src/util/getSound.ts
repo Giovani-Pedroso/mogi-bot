@@ -1,33 +1,49 @@
-import { PollyClient, ListLexiconsCommand } from "@aws-sdk/client-polly";
-import AWS from "aws-sdk";
-import fs from "fs";
+import * as AWS from "aws-sdk";
+import * as fs from "fs";
+import * as util from "util";
 
-AWS.config.update({ region: "us-east-1" });
-
-const polly = new AWS.Polly();
-const params = {
-  OutputFormat: "mp3", // You can also use 'ogg_vorbis' or 'pcm'
-  Text: "Hello, this is a sample text to be synthesized.",
-  VoiceId: "Joanna", // Choose voice (e.g., Joanna, Matthew, Kendra, etc.)
-};
-// Synthesize speech
-polly.synthesizeSpeech(params, (err, data) => {
-  if (err) {
-    console.log("Error synthesizing speech:", err);
-  } else if (data.AudioStream instanceof Buffer) {
-    // Save the audio stream to a file or play it directly
-    // For example, save to a file
-    const outputFile = "output.mp3";
-    fs.writeFileSync(outputFile, data.AudioStream);
-    console.log(`Speech synthesized and saved to ${outputFile}`);
-  } else {
-    console.log("Unexpected data format returned");
-  }
+// Configurar as credenciais da AWS
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID_T,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_T,
+  region: "us-east-1", // Região onde o serviço Polly está disponível
+  // secretT: process.env.AWS_SESSION_TOKEN,
 });
-const command = new ListLexiconsCommand({});
 
-const getSound = async (text: string) => {
-  console.log(text);
-};
+// Criar uma instância do serviço Polly
+const polly = new AWS.Polly();
 
-getSound("hllo");
+// Texto a ser convertido em voz
+const texto =
+  "Olá, este é um exemplo de mensagem de voz gerada pelo serviço Amazon Polly.";
+
+// Tipos de voz disponíveis em português
+const vocesDisponiveis = [
+  { id: "Ricardo", linguagem: "pt-PT" }, // Português de Portugal (masculino)
+  // Português do Brasil (feminino)
+  ,
+];
+
+// Função para gerar a mensagem de voz
+export async function gerarMensagemVoz(textoEntrada: string) {
+  const voz = { id: "Camila", linguagem: "pt-BR" };
+  const params = {
+    Text: textoEntrada,
+    OutputFormat: "mp3", // Formato de saída (mp3, ogg_vorbis, pcm)
+    VoiceId: voz.id, // ID da voz selecionada
+    LanguageCode: voz.linguagem, // Código do idioma da voz
+  };
+
+  try {
+    const data = await polly.synthesizeSpeech(params).promise();
+    if (data.AudioStream instanceof Buffer) {
+      // Salvar o arquivo de áudio
+      const arquivo = `mensagem_audio.mp3`;
+      const escreverArquivo = util.promisify(fs.writeFile);
+      await escreverArquivo(arquivo, data.AudioStream);
+      console.log(`Arquivo de áudio "${arquivo}" gerado com sucesso!`);
+    }
+  } catch (err) {
+    console.error("Erro ao gerar mensagem de voz:", err);
+  }
+}

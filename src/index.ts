@@ -2,6 +2,7 @@ import "dotenv/config";
 import { Telegraf } from "telegraf";
 import { callbackQuery, message } from "telegraf/filters";
 import { getAns } from "./util/getAns";
+import { gerarMensagemVoz } from "./util/getSound";
 
 const TOKEN = process.env.TOKEN_TELEGRAM as string;
 const bot = new Telegraf(TOKEN);
@@ -9,9 +10,9 @@ const bot = new Telegraf(TOKEN);
 const NOME_BOT = "SamIA";
 
 bot.start(async (ctx) => {
-  await ctx.replyWithPhoto({
-    source: "./src/public/09b8252c-e0d7-489b-9e20-39ab2d8209d3.jpeg",
-  });
+  // await ctx.replyWithPhoto({
+  //   source: "./src/public/09b8252c-e0d7-489b-9e20-39ab2d8209d3.jpeg",
+  // });
   await ctx.reply(
     `Oii eu sou a ${NOME_BOT} sou a inteligencia artificial da secretaria de saude de Mogi, como posso estar ajudando vc`,
   );
@@ -48,6 +49,8 @@ bot.on(message("text"), async (ctx) => {
   ctx.reply("Voce é a primeira da fila, só um momento");
   const ans = await getAns(textOfMensage);
   ctx.reply(ans);
+  await gerarMensagemVoz(ans);
+  ctx.replyWithAudio({ source: "./mensagem_audio.mp3" });
   console.log(ans);
 });
 
