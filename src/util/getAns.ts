@@ -5,7 +5,9 @@ import {
 } from "@aws-sdk/client-bedrock-runtime";
 
 export const getAns = async (question: string) => {
-  const client = new BedrockRuntimeClient({ region: "us-east-1" });
+  const client = new BedrockRuntimeClient({
+    region: "us-east-1",
+  });
 
   console.log(question);
   const input = {
