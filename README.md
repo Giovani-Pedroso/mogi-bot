@@ -1,5 +1,6 @@
 Codigo testado no Arch Linux
 Não usar o wifi do evento
+Pedro-Garcia
 
 # Crie um bot no telegram e adicione o token no arquivo .env
 
