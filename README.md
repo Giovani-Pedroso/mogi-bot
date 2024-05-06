@@ -5,7 +5,7 @@ Pedro-Garcia
 # Crie um bot no telegram e adicione o token no arquivo .env
 
 ```
-TOKEN_TELEGRAM=""
+TOKEN_TELEGRAM="""
 ```
 
 # Instalação do node_modules
